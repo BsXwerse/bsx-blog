@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="logLevel" source="log.level"/>
+    <springProperty scope="context" name="logPath" source="log.path"/>
+<!--    输出到控制台-->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出，详细请参考log4j API -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%thread] %C.%M: %m%n</pattern>
+        </encoder>
+    </appender>
+<!--    输出到文件-->
+    <appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/bsx_blog_user_now.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件备份的文件名 -->
+            <FileNamePattern>${logPath}/bsx_blog_user_%d{yyyy-MM-dd}_%i.log
+            </FileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%thread] %C.%M: %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="${logLevel}">
+        <appender-ref ref="rollingFileAppender" />
+        <appender-ref ref="consoleAppender" />
+    </root>
+</configuration>
