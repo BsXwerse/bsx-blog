@@ -2,11 +2,13 @@ package com.bsxjzb.domain.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
 @TableName("bsx_article")
+@Accessors(chain = true)
 public class Article {
     @TableId
     private Long id;

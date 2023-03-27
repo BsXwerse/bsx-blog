@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -26,6 +27,11 @@ public class TestController {
     public BlogResponse getArticle(){
         List<Article> list = articleService.list();
         return BlogResponse.ok(list);
+    }
+
+    @GetMapping("/time")
+    public void time(Date date){
+        System.out.println(date);
     }
 
 
