@@ -5,4 +5,6 @@ import com.bsxjzb.domain.vo.BlogUserLoginVO;
 
 public interface BlogLoginService {
     BlogUserLoginVO login(User user);
+
+    void logout();
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -39,5 +40,12 @@ public class BlogLoginServiceImpl implements BlogLoginService {
 
         UserInfoVO userInfoVO = BeanCopyUtil.copyBean(loginUser.getUser(), UserInfoVO.class);
         return new BlogUserLoginVO(jwt, userInfoVO);
+    }
+
+    @Override
+    public void logout() {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+        redisCache.deleteObject("userlogin:" + userId);
     }
 }

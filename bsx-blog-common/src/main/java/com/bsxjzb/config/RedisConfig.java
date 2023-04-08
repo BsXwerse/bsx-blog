@@ -1,5 +1,9 @@
 package com.bsxjzb.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -17,8 +21,12 @@ public class RedisConfig {
         // 设置连接工厂，相关信息从yml配置文件中读取
         template.setConnectionFactory(connectionFactory);
         // 创建JSON序列化工具
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY);
         GenericJackson2JsonRedisSerializer jsonRedisSerializer =
-                new GenericJackson2JsonRedisSerializer();
+                new GenericJackson2JsonRedisSerializer(objectMapper);
         // 设置Key的序列化
         template.setKeySerializer(RedisSerializer.string());
         template.setHashKeySerializer(RedisSerializer.string());

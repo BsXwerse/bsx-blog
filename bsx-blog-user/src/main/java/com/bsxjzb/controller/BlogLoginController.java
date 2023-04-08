@@ -27,4 +27,10 @@ public class BlogLoginController {
         BlogUserLoginVO blogUserLoginVO = blogLoginService.login(user);
         return BlogResponse.ok(blogUserLoginVO);
     }
+
+    @PostMapping("/logout")
+    public BlogResponse logout() {
+        blogLoginService.logout();
+        return BlogResponse.ok();
+    }
 }

@@ -2,6 +2,7 @@ package com.bsxjzb.controller;
 
 import com.bsxjzb.domain.BlogResponse;
 import com.bsxjzb.domain.vo.ArticleDetailVO;
+import com.bsxjzb.domain.vo.ArticleListVO;
 import com.bsxjzb.domain.vo.ArticleVO;
 import com.bsxjzb.domain.vo.PageVO;
 import com.bsxjzb.service.ArticleService;
@@ -29,7 +30,7 @@ public class ArticleController {
 
     @GetMapping("/articleList")
     public BlogResponse ariticleList(Integer pageNum, Integer pageSize, Long categoryId) {
-        PageVO pageVO = articleService.articleList(pageNum, pageSize, categoryId);
+        PageVO<ArticleListVO> pageVO = articleService.articleList(pageNum, pageSize, categoryId);
         return BlogResponse.ok(pageVO);
     }
 

@@ -51,7 +51,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<Article> articleList = records.stream().map(o -> o.setCategoryName(categoryService.getById(o.getCategoryId()).getName()))
                 .collect(Collectors.toList());
         List<ArticleListVO> articleListVOS = BeanCopyUtil.copyBeanList(articleList, ArticleListVO.class);
-        return new PageVO(articlePage.getTotal(), articleListVOS);
+        return new PageVO<ArticleListVO>(articlePage.getTotal(), articleListVOS);
     }
 
     @Override
