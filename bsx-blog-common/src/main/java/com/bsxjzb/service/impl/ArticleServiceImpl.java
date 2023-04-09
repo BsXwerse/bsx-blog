@@ -14,7 +14,9 @@ import com.bsxjzb.mapper.ArticleMapper;
 import com.bsxjzb.service.ArticleService;
 import com.bsxjzb.service.CategoryService;
 import com.bsxjzb.util.BeanCopyUtil;
+import com.bsxjzb.util.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private RedisCache redisCache;
 
     @Override
     public List<ArticleVO> getHotArticleList() {
@@ -58,11 +63,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ArticleDetailVO getArticleDetail(Long id) {
         Article a = getById(id);
         ArticleDetailVO articleDetailVO = BeanCopyUtil.copyBean(a, ArticleDetailVO.class);
-        //todo redis获取访问量
+        Long viewCount = redisCache.getCacheMapValue("article:viewCount", id.toString());
+        articleDetailVO.setViewCount(viewCount);
         Category category = categoryService.getById(articleDetailVO.getCategoryId());
         if(category != null) {
             articleDetailVO.setCategoryName(category.getName());
         }
         return articleDetailVO;
+    }
+
+    @Override
+    public void updateViewCount(Long id) {
+        redisCache.incrementCacheMapValue("article:viewCount", id.toString(), 1);
     }
 }

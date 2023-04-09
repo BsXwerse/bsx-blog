@@ -24,6 +24,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         Long userId = SecurityUtil.getUserId();
         this.setFieldValByName("updateTime", new Date(), metaObject);
-        this.setFieldValByName("updateBy", userId, metaObject);
+        this.setFieldValByName("updateBy", userId, metaObject);//todo viewcount更新不改变更新人
     }
 }

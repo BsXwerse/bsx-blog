@@ -29,7 +29,7 @@ public class LogAspect {
     }
 
     private void handleAfter(Object ret) {
-        log.info("Response        :{}", JsonUtil.objectTOJson(ret));
+        log.info("Response        :{}" + System.lineSeparator(), JsonUtil.objectTOJson(ret));
     }
 
     private void handleBefore(ProceedingJoinPoint joinPoint) {

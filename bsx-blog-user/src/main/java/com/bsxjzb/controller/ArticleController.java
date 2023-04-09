@@ -6,16 +6,11 @@ import com.bsxjzb.domain.vo.ArticleListVO;
 import com.bsxjzb.domain.vo.ArticleVO;
 import com.bsxjzb.domain.vo.PageVO;
 import com.bsxjzb.service.ArticleService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
@@ -38,5 +33,11 @@ public class ArticleController {
     public BlogResponse getArticleDetail(@PathVariable("id") Long id) {
         ArticleDetailVO articleDetailVO = articleService.getArticleDetail(id);
         return BlogResponse.ok(articleDetailVO);
+    }
+
+    @PutMapping("/updateViewCount/{id}")
+    public BlogResponse updateViewCount(@PathVariable("id") Long id) {
+        articleService.updateViewCount(id);
+        return BlogResponse.ok();
     }
 }

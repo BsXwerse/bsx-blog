@@ -18,7 +18,6 @@ public class SecurityUtil {
         try {
             id = getLoginUser().getUser().getId();
         } catch (Exception e) {
-            e.printStackTrace();
             id = -1L;
         }
         return id;

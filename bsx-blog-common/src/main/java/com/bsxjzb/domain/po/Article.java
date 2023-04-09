@@ -2,12 +2,14 @@ package com.bsxjzb.domain.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
 @TableName("bsx_article")
+@NoArgsConstructor
 @Accessors(chain = true)
 public class Article {
     @TableId
@@ -16,6 +18,12 @@ public class Article {
     private String title;
     //文章内容
     private String content;
+
+    public Article(Long id, Long viewCount) {
+        this.id = id;
+        this.viewCount = viewCount;
+    }
+
     //文章摘要
     private String summary;
     //所属分类id
