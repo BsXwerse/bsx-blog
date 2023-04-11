@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Set;
 
 @Component
 public class RedisCache {
@@ -45,4 +46,8 @@ public class RedisCache {
         return hashOperations.get(key, hKey);
     }
 
+    public Long fuzzyDelete(final String pattern) {
+        Set<String> keys = redisTemplate.keys(pattern);
+        return redisTemplate.delete(keys);
+    }
 }

@@ -35,11 +35,8 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/logout").authenticated()
-                .antMatchers("/user/userInfo").authenticated()
-                .antMatchers("/comment").authenticated()
-                .anyRequest().permitAll();
+                .antMatchers("/user/login").anonymous()
+                .anyRequest().authenticated();
         http.logout().disable();
         http.cors();
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);

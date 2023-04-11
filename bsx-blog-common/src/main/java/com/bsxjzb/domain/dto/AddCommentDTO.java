@@ -1,7 +1,10 @@
 package com.bsxjzb.domain.dto;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class AddCommentDTO {
     private Long id;
     //评论类型（0代表文章评论，1代表友链评论）

@@ -1,5 +1,6 @@
 package com.bsxjzb.runner;
 
+import com.bsxjzb.constants.SysConstants;
 import com.bsxjzb.domain.po.Article;
 import com.bsxjzb.mapper.ArticleMapper;
 import com.bsxjzb.util.RedisCache;
@@ -26,6 +27,6 @@ public class ViewCountRunner implements CommandLineRunner {
                 a -> a.getId().toString(),
                 a -> a.getViewCount().intValue()
         ));
-        redisCache.setCacheMap("article:viewCount", map);
+        redisCache.setCacheMap(SysConstants.REDIS_ARTICLE_VIEWCOUNT_KEY, map);
     }
 }

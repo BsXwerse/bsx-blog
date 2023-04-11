@@ -6,7 +6,6 @@ import com.bsxjzb.domain.po.User;
 import com.bsxjzb.domain.vo.BlogUserLoginVO;
 import com.bsxjzb.exception.SystemException;
 import com.bsxjzb.service.BlogLoginService;
-import io.lettuce.core.output.BooleanListOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +20,7 @@ public class BlogLoginController {
 
     @PostMapping("/login")
     public BlogResponse login(@RequestBody User user) {
-        if (!StringUtils.hasText(user.getUserName())) {
+        if (!StringUtils.hasText(user.getUsername())) {
             throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
         }
         BlogUserLoginVO blogUserLoginVO = blogLoginService.login(user);

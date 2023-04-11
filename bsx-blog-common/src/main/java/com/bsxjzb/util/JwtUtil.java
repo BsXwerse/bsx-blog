@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class JwtUtil {
-    public static Long JWT_TTL = 2 * 60 * 60 * 1000L;
+    public static Long JWT_TTL = 24 * 60 * 60 * 1000L;
     public static String JWT_KEY = "madohomuhomu";
     public static SecretKey key;
 

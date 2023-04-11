@@ -29,7 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void register(User user) {
-        if(!StringUtils.hasText(user.getUserName())){
+        if(!StringUtils.hasText(user.getUsername())){
             throw new SystemException(AppHttpCodeEnum.USERNAME_NOT_NULL);
         }
         if(!StringUtils.hasText(user.getPassword())){
@@ -41,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(!StringUtils.hasText(user.getNickName())){
             throw new SystemException(AppHttpCodeEnum.NICKNAME_NOT_NULL);
         }
-        if(userNameExist(user.getUserName())){
+        if(userNameExist(user.getUsername())){
             throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
         }
         if(nickNameExist(user.getNickName())){
@@ -60,7 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private boolean userNameExist(String userName) {
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.eq(User::getUserName, userName);
+        userLambdaQueryWrapper.eq(User::getUsername, userName);
         return count(userLambdaQueryWrapper) > 0;
     }
 }

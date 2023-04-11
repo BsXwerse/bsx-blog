@@ -63,7 +63,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ArticleDetailVO getArticleDetail(Long id) {
         Article a = getById(id);
         ArticleDetailVO articleDetailVO = BeanCopyUtil.copyBean(a, ArticleDetailVO.class);
-        Long viewCount = redisCache.getCacheMapValue("article:viewCount", id.toString());
+        Long viewCount = ((Integer) redisCache.getCacheMapValue(SysConstants.REDIS_ARTICLE_VIEWCOUNT_KEY, id.toString())).longValue();
         articleDetailVO.setViewCount(viewCount);
         Category category = categoryService.getById(articleDetailVO.getCategoryId());
         if(category != null) {
@@ -74,6 +74,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void updateViewCount(Long id) {
-        redisCache.incrementCacheMapValue("article:viewCount", id.toString(), 1);
+        redisCache.incrementCacheMapValue(SysConstants.REDIS_ARTICLE_VIEWCOUNT_KEY, id.toString(), 1);
     }
 }
