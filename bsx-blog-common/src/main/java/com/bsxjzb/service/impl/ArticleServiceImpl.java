@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bsxjzb.constants.SysConstants;
+import com.bsxjzb.domain.dto.AddArticleDTO;
 import com.bsxjzb.domain.po.Article;
+import com.bsxjzb.domain.po.ArticleTag;
 import com.bsxjzb.domain.po.Category;
 import com.bsxjzb.domain.vo.ArticleDetailVO;
 import com.bsxjzb.domain.vo.ArticleListVO;
@@ -12,6 +14,7 @@ import com.bsxjzb.domain.vo.ArticleVO;
 import com.bsxjzb.domain.vo.PageVO;
 import com.bsxjzb.mapper.ArticleMapper;
 import com.bsxjzb.service.ArticleService;
+import com.bsxjzb.service.ArticleTagService;
 import com.bsxjzb.service.CategoryService;
 import com.bsxjzb.util.BeanCopyUtil;
 import com.bsxjzb.util.RedisCache;
@@ -31,6 +34,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private ArticleTagService articleTagService;
 
     @Override
     public List<ArticleVO> getHotArticleList() {
@@ -75,5 +81,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public void updateViewCount(Long id) {
         redisCache.incrementCacheMapValue(SysConstants.REDIS_ARTICLE_VIEWCOUNT_KEY, id.toString(), 1);
+    }
+
+    @Override
+    public void add(AddArticleDTO addArticleDTO) {
+        Article article = BeanCopyUtil.copyBean(addArticleDTO, Article.class);
+        save(article);
+        List<ArticleTag> collect = addArticleDTO.getTags().stream()
+                .map(tId -> new ArticleTag(article.getId(), tId)).collect(Collectors.toList());
+        articleTagService.saveBatch(collect);
     }
 }

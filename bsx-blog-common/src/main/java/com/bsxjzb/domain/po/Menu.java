@@ -3,19 +3,27 @@ package com.bsxjzb.domain.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("sys_menu")
 @Accessors(chain = true)
 public class Menu  {
     //菜单ID
     @TableId
     private Long id;
+
+    public Menu(Long id) {
+        this.id = id;
+    }
 
     //菜单名称
     private String menuName;

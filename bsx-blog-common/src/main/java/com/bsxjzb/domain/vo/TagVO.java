@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryVO {
+public class TagVO {
     private Long id;
     private String name;
-    private String description;
 }

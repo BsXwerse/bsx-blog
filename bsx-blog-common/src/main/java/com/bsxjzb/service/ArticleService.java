@@ -1,6 +1,7 @@
 package com.bsxjzb.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bsxjzb.domain.dto.AddArticleDTO;
 import com.bsxjzb.domain.po.Article;
 import com.bsxjzb.domain.vo.ArticleDetailVO;
 import com.bsxjzb.domain.vo.ArticleListVO;
@@ -17,4 +18,6 @@ public interface ArticleService extends IService<Article> {
     ArticleDetailVO getArticleDetail(Long id);
 
     void updateViewCount(Long id);
+
+    void add(AddArticleDTO addArticleDTO);
 }

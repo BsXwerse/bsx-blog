@@ -45,12 +45,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         String userId = claims.getSubject();
-        LoginUser loginUser;
-        if (Long.parseLong(userId) == 1L) {
-            loginUser = redisCache.getCacheObject(SysConstants.REDIS_ADMIN_LOGIN_KEY + userId);
-        } else {
-            loginUser = redisCache.getCacheObject(SysConstants.REDIS_USER_LOGIN_KEY + userId);
-        }
+        LoginUser loginUser = redisCache.getCacheObject(SysConstants.REDIS_USER_LOGIN_KEY + userId);
         if (Objects.isNull(loginUser)) {
             BlogResponse error = BlogResponse.error(AppHttpCodeEnum.NEED_LOGIN);
             HttpUtil.writeString(response, JsonUtil.objectTOJson(error));

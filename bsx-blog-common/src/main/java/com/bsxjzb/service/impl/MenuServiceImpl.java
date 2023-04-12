@@ -25,4 +25,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
         return getBaseMapper().selectPermsByUserId(userId);
     }
+
+    @Override
+    public List<Menu> selectRouterMenuTreeByUserId(Long userId) {
+        List<Menu> menus;
+        if (SecurityUtil.isAdmin()) {
+            menus = getBaseMapper().selectAllRouterMenu();
+        } else {
+            menus = getBaseMapper().selectRouterMenuTreeByUserId(userId);
+        }
+        return builderMenuTree(new Menu(0L), menus);
+    }
+
+    private List<Menu> builderMenuTree(Menu menu, List<Menu> menus) {
+        return menus.stream().filter(m -> m.getParentId().equals(menu.getId()))
+                .map(m -> m.setChildren(builderMenuTree(m, menus))).collect(Collectors.toList());
+    }
 }

@@ -15,4 +15,5 @@ public class SysConstants {
     public static final String MENU_STATUS_DISABLE = "1";
     public static final String MENU_TYPE_BUTTON = "F";
     public static final String MENU_TYPE_MENU = "C";
+    public static final String TYPE_ADMIN = "1";
 }
