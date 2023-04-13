@@ -5,21 +5,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bsxjzb.constants.SysConstants;
 import com.bsxjzb.domain.dto.AddArticleDTO;
+import com.bsxjzb.domain.dto.ArticleDTO;
 import com.bsxjzb.domain.po.Article;
 import com.bsxjzb.domain.po.ArticleTag;
 import com.bsxjzb.domain.po.Category;
-import com.bsxjzb.domain.vo.ArticleDetailVO;
-import com.bsxjzb.domain.vo.ArticleListVO;
-import com.bsxjzb.domain.vo.ArticleVO;
-import com.bsxjzb.domain.vo.PageVO;
+import com.bsxjzb.domain.vo.*;
 import com.bsxjzb.mapper.ArticleMapper;
 import com.bsxjzb.service.ArticleService;
 import com.bsxjzb.service.ArticleTagService;
 import com.bsxjzb.service.CategoryService;
 import com.bsxjzb.util.BeanCopyUtil;
 import com.bsxjzb.util.RedisCache;
+import io.jsonwebtoken.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,14 +37,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleTagService articleTagService;
 
     @Override
-    public List<ArticleVO> getHotArticleList() {
+    public List<HotArticleVO> getHotArticleList() {
         LambdaQueryWrapper<Article> aq = new LambdaQueryWrapper<>();
         aq.eq(Article::getStatus, SysConstants.ARTICLE_STATUS_NORMAL);
         aq.orderByDesc(Article::getViewCount);
         Page<Article> articlePage = new Page<>(1, 10);
         page(articlePage,aq);
         List<Article> records = articlePage.getRecords();
-        List<ArticleVO> res = BeanCopyUtil.copyBeanList(records, ArticleVO.class);
+        List<HotArticleVO> res = BeanCopyUtil.copyBeanList(records, HotArticleVO.class);
         return res;
     }
 
@@ -90,5 +88,40 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<ArticleTag> collect = addArticleDTO.getTags().stream()
                 .map(tId -> new ArticleTag(article.getId(), tId)).collect(Collectors.toList());
         articleTagService.saveBatch(collect);
+    }
+
+    @Override
+    public PageVO<Article> selectArticlePage(Article article, Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<Article> aqw = new LambdaQueryWrapper<>();
+        aqw.like(Strings.hasText(article.getTitle()), Article::getTitle, article.getTitle());
+        aqw.like(Strings.hasText(article.getSummary()), Article::getSummary, article.getSummary());
+        Page<Article> articlePage = new Page<>(pageNum, pageSize);
+        page(articlePage, aqw);
+        List<Article> records = articlePage.getRecords();
+//        List<HotArticleVO> articleVOS = BeanCopyUtil.copyBeanList(records, HotArticleVO.class);
+        return new PageVO<>(articlePage.getTotal(), records);
+    }
+
+    @Override
+    public void edit(ArticleDTO articleDTO) {
+        Article article = BeanCopyUtil.copyBean(articleDTO, Article.class);
+        updateById(article);
+        LambdaQueryWrapper<ArticleTag> qw = new LambdaQueryWrapper<>();
+        qw.eq(ArticleTag::getArticleId, article.getId());
+        articleTagService.remove(qw);
+        List<ArticleTag> collect = articleDTO.getTags().stream()
+                .map(x -> new ArticleTag(article.getId(), x)).collect(Collectors.toList());
+        articleTagService.saveBatch(collect);
+    }
+
+    @Override
+    public ArticleVO getInfo(Long id) {
+        ArticleVO articleVO = BeanCopyUtil.copyBean(getById(id), ArticleVO.class);
+        LambdaQueryWrapper<ArticleTag> aqw = new LambdaQueryWrapper<>();
+        aqw.eq(ArticleTag::getArticleId, id);
+        List<ArticleTag> list = articleTagService.list(aqw);
+        List<Long> collect = list.stream().map(ArticleTag::getTagId).collect(Collectors.toList());
+        articleVO.setTags(collect);
+        return articleVO;
     }
 }

@@ -1,4 +1,4 @@
-package com.bsxjzb.domain.vo;
+package com.bsxjzb.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticleVO {
+public class ArticleDTO {
 
     private Long id;
     //标题

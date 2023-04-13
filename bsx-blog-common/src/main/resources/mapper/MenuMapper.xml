@@ -42,4 +42,12 @@
         AND         m.`status` = 0
         ORDER BY    m.`parent_id`, m.`order_num`
     </select>
+    <select id = "selectMenuListByRoleId" resultType = "java.lang.Long">
+        SELECT      m.`id`
+        FROM        `sys_menu` m
+        LEFT JOIN   `sys_role_menu` rm
+        ON          m.`id = rm.`menu_id`
+        WHERE       rm.`role_id` = #{id}
+        ORDER BY    m.`parent_id`, m.`order_num`
+    </select>
 </mapper>

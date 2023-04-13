@@ -3,7 +3,7 @@ package com.bsxjzb.controller;
 import com.bsxjzb.domain.BlogResponse;
 import com.bsxjzb.domain.vo.ArticleDetailVO;
 import com.bsxjzb.domain.vo.ArticleListVO;
-import com.bsxjzb.domain.vo.ArticleVO;
+import com.bsxjzb.domain.vo.HotArticleVO;
 import com.bsxjzb.domain.vo.PageVO;
 import com.bsxjzb.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class ArticleController {
 
     @GetMapping("/hotArticleList")
     public BlogResponse hotArticleList() {
-        List<ArticleVO> hotList = articleService.getHotArticleList();
+        List<HotArticleVO> hotList = articleService.getHotArticleList();
         return BlogResponse.ok(hotList);
     }
 
