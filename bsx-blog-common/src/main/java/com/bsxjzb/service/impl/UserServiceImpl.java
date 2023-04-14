@@ -1,15 +1,18 @@
 package com.bsxjzb.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bsxjzb.constants.enums.AppHttpCodeEnum;
 import com.bsxjzb.domain.po.User;
+import com.bsxjzb.domain.po.UserRole;
 import com.bsxjzb.domain.vo.PageVO;
 import com.bsxjzb.domain.vo.UserInfoVO;
 import com.bsxjzb.domain.vo.UserVO;
 import com.bsxjzb.exception.SystemException;
 import com.bsxjzb.mapper.UserMapper;
+import com.bsxjzb.service.UserRoleService;
 import com.bsxjzb.service.UserService;
 import com.bsxjzb.util.BeanCopyUtil;
 import com.bsxjzb.util.SecurityUtil;
@@ -18,12 +21,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     public UserInfoVO getUserInfo() {
@@ -67,6 +75,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         page(userPage, queryWrapper);
         List<UserVO> userVOS = BeanCopyUtil.copyBeanList(userPage.getRecords(), UserVO.class);
         return new PageVO<>(userPage.getTotal(), userVOS);
+    }
+
+    @Override
+    public boolean checkUserNameUnique(String username) {
+        return count(Wrappers.<User>lambdaQuery().eq(User::getUsername, username)) == 0;
+    }
+
+    @Override
+    public boolean checkPhoneUnique(User user) {
+        return count(Wrappers.<User>lambdaQuery().eq(User::getPhonenumber, user.getPhonenumber())) == 0;
+    }
+
+    @Override
+    public boolean checkEmailUnique(User user) {
+        return count(Wrappers.<User>lambdaQuery().eq(User::getEmail, user.getEmail())) == 0;
+    }
+
+    @Override
+    public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        save(user);
+        if (user.getRoleIds() != null && user.getRoleIds().length > 0) {
+            insertUserRole(user);
+        }
+    }
+
+    @Override
+    public void updateUser(User user) {
+        updateById(user);
+        userRoleService.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, user.getId()));
+        insertUserRole(user);
+    }
+
+    private void insertUserRole(User user) {
+        List<UserRole> collect = Arrays.stream(user.getRoleIds())
+                .map(x -> new UserRole(user.getId(), x))
+                .collect(Collectors.toList());
+        userRoleService.saveBatch(collect);
     }
 
     private boolean nickNameExist(String nickName) {

@@ -1,8 +1,10 @@
 package com.bsxjzb.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bsxjzb.constants.SysConstants;
 import com.bsxjzb.domain.po.Role;
 import com.bsxjzb.domain.po.RoleMenu;
 import com.bsxjzb.domain.vo.PageVO;
@@ -57,6 +59,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         updateById(role);
         roleMenuService.deleteRoleMenuByRoleId(role.getId());
         insertRoleMenu(role);
+    }
+
+    @Override
+    public List<Role> selectRoleAll() {
+        return list(Wrappers.<Role>lambdaQuery().eq(Role::getStatus, SysConstants.ROLE_STATUS_NORMAL));
+    }
+
+    @Override
+    public List<Long> selectRoleIdByUserId(Long id) {
+        return getBaseMapper().selectRoleIdByUserId(id);
     }
 
     private void insertRoleMenu(Role role) {

@@ -8,6 +8,8 @@ import com.bsxjzb.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/system/role")
 public class RoleController {
@@ -51,5 +53,11 @@ public class RoleController {
     public BlogResponse remove(@PathVariable("id") Long id) {
         roleService.removeById(id);
         return BlogResponse.ok();
+    }
+
+    @GetMapping("/listAllRole")
+    public BlogResponse listAllRole() {
+        List<Role> list = roleService.selectRoleAll();
+        return BlogResponse.ok(list);
     }
 }

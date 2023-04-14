@@ -12,4 +12,14 @@ public interface UserService extends IService<User> {
     void register(User user);
 
     PageVO<UserVO> selectUserPage(User user, Integer pageNum, Integer pageSize);
+
+    boolean checkUserNameUnique(String username);
+
+    boolean checkPhoneUnique(User user);
+
+    boolean checkEmailUnique(User user);
+
+    void addUser(User user);
+
+    void updateUser(User user);
 }
