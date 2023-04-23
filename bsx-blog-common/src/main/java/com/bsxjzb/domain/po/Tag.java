@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("sg_tag")
+@TableName("bsx_tag")
 public class Tag  {
     @TableId
     private Long id;

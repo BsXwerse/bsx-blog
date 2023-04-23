@@ -6,9 +6,11 @@ import com.bsxjzb.constants.SysConstants;
 import com.bsxjzb.domain.po.Menu;
 import com.bsxjzb.domain.vo.MenuTreeVO;
 import com.bsxjzb.mapper.MenuMapper;
+import com.bsxjzb.mapper.RoleMapper;
 import com.bsxjzb.service.MenuService;
 import com.bsxjzb.util.SecurityUtil;
 import io.jsonwebtoken.lang.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +18,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+    @Autowired
+    private RoleMapper roleMapper;
+
     @Override
     public List<String> selectPermsByUserId(Long userId) {
-        if (SecurityUtil.isAdmin()) {
+        if (SecurityUtil.isAdmin() || roleMapper.selectRoleIdByUserId(userId).contains(1L)) {
             LambdaQueryWrapper<Menu> mqw = new LambdaQueryWrapper<>();
             mqw.in(Menu::getMenuType, SysConstants.MENU_TYPE_MENU, SysConstants.MENU_TYPE_BUTTON);
             mqw.eq(Menu::getStatus, SysConstants.MENU_STATUS_NORMAL);
@@ -31,7 +36,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<Menu> selectRouterMenuTreeByUserId(Long userId) {
         List<Menu> menus;
-        if (SecurityUtil.isAdmin()) {
+        if (SecurityUtil.isAdmin() || roleMapper.selectRoleIdByUserId(userId).contains(1L)) {
             menus = getBaseMapper().selectAllRouterMenu();
         } else {
             menus = getBaseMapper().selectRouterMenuTreeByUserId(userId);

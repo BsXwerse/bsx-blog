@@ -12,9 +12,10 @@ spring:
       matching-strategy: ant_path_matcher
   main:
     allow-circular-references: true
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8
+#    default-property-inclusion: non_null
   redis:
     database: 0
     host: 192.168.244.138
