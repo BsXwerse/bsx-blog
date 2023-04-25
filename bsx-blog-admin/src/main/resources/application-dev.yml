@@ -59,3 +59,6 @@ oss:
   secretKey: Tu43QglpIBg4-lGBhA9UlXxJ_iScB2CblHR-uC-n
   bucket: bsx-jzb-blog01
   outLink: http://rsqxyotjk.bkt.clouddn.com/
+
+env:
+  active: dev

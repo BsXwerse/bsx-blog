@@ -9,6 +9,7 @@ import com.bsxjzb.domain.vo.AdminUserInfoVO;
 import com.bsxjzb.domain.vo.RoutersVO;
 import com.bsxjzb.domain.vo.UserInfoVO;
 import com.bsxjzb.exception.SystemException;
+import com.bsxjzb.runner.StopScriptRunner;
 import com.bsxjzb.service.AdminLoginService;
 import com.bsxjzb.service.MenuService;
 import com.bsxjzb.service.RoleService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Map;
 
@@ -62,5 +64,10 @@ public class AdminLoginController {
     public BlogResponse logout() {
         adminLoginService.logout();
         return BlogResponse.ok();
+    }
+
+    @PreDestroy
+    public void deleteStopScript() {
+        StopScriptRunner.deleteStopScript();
     }
 }

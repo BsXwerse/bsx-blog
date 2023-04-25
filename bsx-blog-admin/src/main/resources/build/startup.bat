@@ -1,0 +1,1 @@
+java -jar -Xms512m -Xmx512m bsx-blog-admin-server.jar

@@ -1,0 +1,1 @@
+nohup java -jar -Xms512m -Xmx512m bsx-blog-admin-server.jar >/dev/null 2>&1 &

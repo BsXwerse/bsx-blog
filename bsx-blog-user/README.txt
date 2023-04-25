@@ -1,0 +1,2 @@
+startup运行
+stop终止
