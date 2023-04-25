@@ -16,6 +16,10 @@ mysql建库bsx_blog，运行sql文件夹下的测试
 
 执行build脚本，win执行 .bat，linux&mac执行 .sh
 
-得到bsx-blog-admin.zip和bsx-blog-user.zip，分别为后台和前台，解压运行startup脚本启动，stop脚本停止
+得到bsx-blog-admin.zip和bsx-blog-user.zip，分别为后台和前台
+
+解压后application.yml修改mysql用户密码，redis密码
+
+运行startup脚本启动，stop脚本停止
 
 >前端工程在front-end文件夹下
