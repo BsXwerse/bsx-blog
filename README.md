@@ -7,6 +7,10 @@
 
 后台可发布博文，管理用户等
 
+演示：
+
+![image](https://github.com/BsXwerse/bsx-blog/blob/master/sample.gif)
+
 #### 使用
 准备环境，jdk8，maven，redis，mysql
 
